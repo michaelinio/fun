@@ -101,6 +101,8 @@ Bot.prototype.action = function (data) {
 
         this.previousMove = move;
 
+        // this.field.getNextMove();
+
         return move;
     }
 };

@@ -18,6 +18,7 @@
 
         this.grid = [];
         this.gameField = [];
+        this.scoredBoard = [];
         this.roundNo = 0;
         this.moveNo = 0;
         this.width = width;
@@ -38,6 +39,7 @@
                 this.gameField[x][y] = 0;
             }
         }
+        console.error("Field::initGameField::this.gamefield::");
         console.error(this.gameField);
     };
 
@@ -65,20 +67,70 @@
         if (key === 'field') {
             this.parseFromString(this.parsedvalue);
             this.updateGameField();
-            console.error(this.gameField);
+            this.getNeighbours();
             console.error('me: ',this.me,'enemy: ',this.enemy);
-            console.error(this.getNeighbours());
             console.error("===============================================================================================================");
         }
     };
 
+    Field.prototype.getNextMove = function () {
+
+
+
+        // return move;
+    };
+
     Field.prototype.getNeighbours = function() {
-        result = [];
+
         var x = this.me[0][0];
         var y =this.me[1][0];
-        console.error(x,y);
-        result.push(this.gameField[x][y]);
-        return result;
+        console.error('Field::getNeighbours::this.me::xy:: ',x,y);
+
+        console.error('max amount of itterations for X', ((this.gameField.length-1)-x));
+        console.error('max amount of itterations for y', ((this.gameField.length-1)-y));
+
+        xItterations = ((this.gameField.length-1)-x);
+        yItterations = ((this.gameField.length-1)-y);
+
+        //plus loop for x
+        for (let i=1;i<=xItterations;i++) {
+            console.error('X-plus-itteration: ' + i);
+            if (this.gameField[y][x + i] != typeof 'undefined') {
+                if (this.gameField[y][x + i] != 0) {
+                    this.scoredBoard.push([y, x + i]);
+                }
+            }
+        }
+        //minus loop for x
+        for (let i=x;i>=0;i--) {
+            console.error('X-minus-itteration: ' + i);
+            if (this.gameField[y][x - i] != typeof 'undefined') {
+                if (this.gameField[y][x - i] != 0) {
+                    this.scoredBoard.push([y, x - i]);
+                }
+            }
+        }
+        //plus loop for y
+        for (let i=1;i<=yItterations;i++) {
+            console.error('Y-plus-itteration: ' + i);
+            if (this.gameField[y + i][x] != typeof 'undefined') {
+                if (this.gameField[y + i][x] != 0) {
+                    this.scoredBoard.push([y + i, x]);
+                }
+            }
+        }
+        //minus loop for y
+        for (let i=y;i>=0;i--) {
+            console.error('Y-minus-itteration: ' + i);
+            if (this.gameField[y - i][x] != typeof 'undefined') {
+                if (this.gameField[y - i][x] != 0) {
+                    this.scoredBoard.push([y - i, x]);
+                }
+            }
+        }
+
+        console.error('this.scoredBoard:: ',this.scoredBoard);
+        // return this.scoredBoard;
     };
     Field.prototype.updateGameField = function () {
         let bad = 0;
@@ -106,6 +158,8 @@
                 counter++;
             }
         }
+        console.error("Field::updateGameField::this.gamefield:: ");
+        console.error(this.gameField);
     };
 
     Field.prototype.parseFromString = function (s) {
